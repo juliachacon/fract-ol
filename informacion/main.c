@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 22:13:03 by julia             #+#    #+#             */
-/*   Updated: 2025/11/09 22:13:05 by julia            ###   ########.fr       */
+/*   Created: 2025/11/09 02:06:10 by julia             #+#    #+#             */
+/*   Updated: 2025/11/09 19:20:01 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 int	main(void)
 {
-	t_fractal	fractal;
+	void	*mlx;
+	void	*win;
 
-	init_fractal(&fractal);
-	init_mlx(&fractal);
-
-	// aquí aún no dibujamos nada en la imagen
-
-	mlx_loop(fractal.mlx);
+	mlx = mlx_init();
+	if (!mlx)
+		return (1);
+	win = mlx_new_window(mlx, SIZE, SIZE, "fract-ol");
+	if (!win)
+		return (1);
+	mlx_loop(mlx);
 	return (0);
 }
