@@ -3,58 +3,73 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jchacon- <jchacon-@student.42.fr>          +#+  +:+       +#+         #
+#    By: julia <julia@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/11/08 23:26:16 by jchacon-          #+#    #+#              #
-#    Updated: 2025/11/08 23:39:51 by jchacon-         ###   ########.fr        #
+#    Created: 2025/11/09 02:02:37 by julia             #+#    #+#              #
+#    Updated: 2025/11/09 02:10:09 by julia            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = fract-ol
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./libft
+NAME        = fractol
 
-SRC = src
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -I./includes -I./includes/libft -I./includes/minilibx-linux
 
-OBJ = obj
-OBJ_FILES	:=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
-RM = rm -f
+# Directorios
+SRC_DIR     = src
+OBJ_DIR     = obj
+
+# Lista de ficheros .c (SOLO el nombre, sin "src/")
+# >>> CAMBIA ESTA LÍNEA CON TUS .C <<<
+SRC_FILES   = main.c
+
+# Construimos rutas completas
+SRCS        = $(addprefix $(SRC_DIR)/,$(SRC_FILES))
+OBJS        = $(addprefix $(OBJ_DIR)/,$(SRC_FILES:.c=.o))
+
+RM          = rm -f
 
 # Libraries
-LIBFT_DIR	:= includes/libft
-LIBFT		:= $(LIBFT_DIR)/libft.a
+LIBFT_DIR       = includes/libft
+LIBFT           = $(LIBFT_DIR)/libft.a
 
-MINILIBX_DIR	:= includes/minilibx-linux
-MINILIBX	:= $(MINILIBX_DIR)/libmlx_Linux.a
+MINILIBX_DIR    = includes/minilibx-linux
+MINILIBX        = $(MINILIBX_DIR)/libmlx_Linux.a
+
+# -------------------- Reglas -------------------- #
 
 all: $(NAME)
-# Compiles source into obj
-$(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
+
+# Asegura que obj/ existe
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# Compilar .c de src/ en .o dentro de obj/
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Ensures obj/ exists
-$(OBJ):
-	mkdir -p $(OBJ)
+# Enlazar todo
+$(NAME): $(OBJS) $(LIBFT) $(MINILIBX)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MINILIBX) -lX11 -lXext -lm -o $(NAME)
 
-$(NAME): $(OBJ_FILES) $(LIBFT) $(MINILIBX)
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) $(MINILIBX) -lX11 -lXext -o $(NAME)
-
+# Compilar libft
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
+# Compilar minilibx
 $(MINILIBX):
 	$(MAKE) -C $(MINILIBX_DIR)
-	
+
 clean:
 	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(MINILIBX_DIR) clean
-	
+
 fclean: clean
-	rm -f $(NAME)
-	rm -f $(LIBFT)
-	
+	$(RM) $(NAME)
+	$(RM) $(LIBFT)
+
 re: fclean all
-	
+
 .PHONY: all clean fclean re
