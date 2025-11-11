@@ -6,12 +6,13 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:49:43 by julia             #+#    #+#             */
-/*   Updated: 2025/11/09 20:42:02 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/11 12:56:29 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
+
 # include "libft.h"
 # include "mlx.h"
 # include <math.h>
@@ -55,7 +56,32 @@ typedef struct s_fractal
 void	init_fractal(t_fractal *fractal);
 void	init_mlx(t_fractal *fractal);
 
-// draw / utils (lo crearás luego)
+//mandelbrot.c
+void	calculate_mandelbrot(t_fractal *fractal);
+
+
+// draw.c
+void	*draw_mandelbrot(void *fractal_void);
+
+// utils.c
 void	put_color_to_pixel(t_fractal *fractal, int x, int y, int colour);
+int	exit_fractal(t_fractal *fractal);
+// int			key_hook(int key_code, t_fractal *fractal);
+// int			mouse_hook(int mouse_code, int x, int y, t_fractal *fractal);
+# ifdef __linux__
+#  define ESC		65307
+#  define LEFT		65361
+#  define UP		65362
+#  define RIGHT	65363
+#  define DOWN		65364
+#  define R		114
+# else
+#  define ESC		53
+#  define LEFT		123
+#  define RIGHT	124
+#  define DOWN		125
+#  define UP		126
+#  define R		15
+#endif
 
 #endif
