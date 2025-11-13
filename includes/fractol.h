@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:49:43 by julia             #+#    #+#             */
-/*   Updated: 2025/11/11 12:56:29 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/13 18:32:45 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 
 typedef struct s_fractal
 {
+	char *name;
 	// MiniLibX
 	void	*mlx;               // conexión con mlx
 	void	*window;            // puntero a la ventana
@@ -44,7 +45,12 @@ typedef struct s_fractal
 	int		x;                  // coordenada x actual (píxel)
 	int		y;                  // coordenada y actual (píxel)
 	int		color;              // color actual
-
+	// Variables del plano complejo
+	double	zx;                 // parte real de z
+	double	zy;                 // parte imaginaria de z
+	double	cx;                 // parte real de c (mapeada desde x)
+	double	cy;                 // parte imaginaria de c (mapeada desde y)
+	
 	// Parámetros del fractal
 	double	offset_x;           // desplazamiento en el eje X
 	double	offset_y;           // desplazamiento en el eje Y
@@ -61,13 +67,14 @@ void	calculate_mandelbrot(t_fractal *fractal);
 
 
 // draw.c
-void	*draw_mandelbrot(void *fractal_void);
+void	draw_mandelbrot(t_fractal *fractal);
 
 // utils.c
 void	put_color_to_pixel(t_fractal *fractal, int x, int y, int colour);
 int	exit_fractal(t_fractal *fractal);
 // int			key_hook(int key_code, t_fractal *fractal);
 // int			mouse_hook(int mouse_code, int x, int y, t_fractal *fractal);
+
 # ifdef __linux__
 #  define ESC		65307
 #  define LEFT		65361

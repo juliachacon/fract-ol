@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractal_mandelbrot.c                               :+:      :+:    :+:   */
+/*   mandelbrot.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 00:24:39 by julia             #+#    #+#             */
-/*   Updated: 2025/11/11 12:13:56 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/13 18:51:47 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	calculate_mandelbrot(t_fractal *fractal)
 	int		i;
 	double	x_temp;
 
-	fractal->name = "mandel";
+	fractal->name = "mandelbrot";
 	i = 0;
 	fractal->zx = 0.0;
 	fractal->zy = 0.0;
-	fractal->cx = (fractal->x / fractal->zoom) + fractal->offset_x;
-	fractal->cy = (fractal->y / fractal->zoom) + fractal->offset_y;
-	while (++i < fractal->max_iterations)
+	fractal->cx = ((fractal->x - SIZE / 2.0) / fractal->zoom) + fractal->offset_x;
+	fractal->cy = ((fractal->y - SIZE / 2.0) / fractal->zoom) + fractal->offset_y;
+	while (i < fractal->max_iterations)
 	{
 		x_temp = fractal->zx * fractal->zx - fractal->zy * fractal->zy
 			+ fractal->cx;
@@ -32,10 +32,26 @@ void	calculate_mandelbrot(t_fractal *fractal)
 		if (fractal->zx * fractal->zx + fractal->zy
 			* fractal->zy >= 4)
 			break ;
+		i++;
 	}
 	if (i == fractal->max_iterations)
-		put_color_to_pixel(fractal, fractal->x, fractal->y, 0x000000);
+		put_color_to_pixel(fractal, fractal->x, fractal->y, 0xFFFFFF);
 	else
-		put_color_to_pixel(fractal, fractal->x, fractal->y, (fractal->color
-				* i));
+	{
+		// Puntos que escapan -> escala de grises
+		double	t; //numero entre 0 y 1
+		int		shade; //número entre  (negro) y 255 (blanco)
+		int		color; //color RGB en formato 0xRRGGBB
+
+		t = (double)i / fractal->max_iterations; //calculo proporciones
+		// Prueba 1: escapadas rápidas claras, lentas oscuras:
+		shade = (int)(255 * (1.0 - t)); // así el shade estara entre 0-255
+		// Si quieres lo contrario, usa: shade = (int)(255 * t);
+		//construyo el color
+		color = (shade << 16) | (shade << 8) | shade;
+		//put_color_to_pixel(fractal, fractal->x, fractal->y, (fractal->color
+		//	* i));
+		put_color_to_pixel(fractal, fractal->x, fractal->y, color);
+	}
+		
 }
