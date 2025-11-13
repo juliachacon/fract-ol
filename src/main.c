@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 22:13:03 by julia             #+#    #+#             */
-/*   Updated: 2025/11/13 20:04:09 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/13 20:08:54 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ int	main(int argc, char **argv)
 	}
 	else if (ft_strncmp(argv[1], "julia", 6) == 0)
 	{
-		// Para Julia necesitamos fijar cx y cy (la "semilla")
-		// Prueba esta combinación (clásica):
+		// Para Julia necesitamos fijar cx y cy
 		fractal.cx = -0.8;
 		fractal.cy = 0.156;
-		// Opcional: puedes ajustar zoom/offset para julia si quieres otra vista
-		// fractal.zoom = 250.0;
-		// fractal.offset_x = 0.0;
-		// fractal.offset_y = 0.0;
+		fractal.zoom = 230.0;
+		fractal.offset_x = 0.0;
+		fractal.offset_y = 0.0;
 		draw_julia(&fractal);
 	}	
 
