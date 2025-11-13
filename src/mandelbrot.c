@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 00:24:39 by julia             #+#    #+#             */
-/*   Updated: 2025/11/13 18:51:47 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/13 19:41:15 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,21 @@ void	calculate_mandelbrot(t_fractal *fractal)
 		// Si quieres lo contrario, usa: shade = (int)(255 * t);
 		//construyo el color
 		color = (shade << 16) | (shade << 8) | shade;
-		//put_color_to_pixel(fractal, fractal->x, fractal->y, (fractal->color
-		//	* i));
+		
+		// // colores arcoiris suaves basados en la proporción de escape
+		// double	t;
+		// int		r;
+		// int		g;
+		// int		b;
+		// int		color;
+
+		// t = (double)i / fractal->max_iterations;
+
+		// r = (int)(128 + 127 * sin(6.2831 * t + 0.0));
+		// g = (int)(128 + 127 * sin(6.2831 * t + 2.094));   // 2π/3
+		// b = (int)(128 + 127 * sin(6.2831 * t + 4.188));   // 4π/3
+
+		// color = (r << 16) | (g << 8) | b;
 		put_color_to_pixel(fractal, fractal->x, fractal->y, color);
 	}
-		
 }

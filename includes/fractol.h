@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:49:43 by julia             #+#    #+#             */
-/*   Updated: 2025/11/13 18:32:45 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/13 19:52:03 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ void	init_mlx(t_fractal *fractal);
 
 //mandelbrot.c
 void	calculate_mandelbrot(t_fractal *fractal);
-
+void    calculate_julia(t_fractal *fractal);
 
 // draw.c
 void	draw_mandelbrot(t_fractal *fractal);
+void    draw_julia(t_fractal *fractal);
 
 // utils.c
 void	put_color_to_pixel(t_fractal *fractal, int x, int y, int colour);
