@@ -1,0 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mouse_keys.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 12:06:03 by julia             #+#    #+#             */
+/*   Updated: 2025/11/15 16:30:48 by julia            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "fractol.h"
+
+void	zoom(t_fractal *fractal, int x, int y, int zoom)
+{
+	double	zoom_level;
+    
+	zoom_level = fractal->zoom_level;
+    if (zoom == ZOOM_IN)
+	{
+        if (fractal->zoom * zoom_level > MAX_ZOOM)
+			return;
+		fractal->offset_x = (x / fractal->zoom + fractal->offset_x) - (x
+				/ (fractal->zoom * zoom_level));
+		fractal->offset_y = (y / fractal->zoom + fractal->offset_y) - (y
+				/ (fractal->zoom * zoom_level));
+		fractal->zoom *= zoom_level;
+	}
+	else if (zoom == ZOOM_OUT)
+	{
+        if (fractal->zoom / zoom_level < MIN_ZOOM)
+			return;
+		fractal->offset_x = (x / fractal->zoom + fractal->offset_x) - (x
+				/ (fractal->zoom / zoom_level));
+		fractal->offset_y = (y / fractal->zoom + fractal->offset_y) - (y
+				/ (fractal->zoom / zoom_level));
+		fractal->zoom /= zoom_level;
+	}
+	else
+		return ;
+}
+
+void	set_random_julia(double *cx, double *cy)
+{
+	*cx = generate_random_c();
+	*cy = generate_random_c();
+}
+
+int	key_hook(int key_code, t_fractal *fractal)
+{
+	if (key_code == ESC)
+        exit_fractal(fractal);
+	else if (key_code == LEFT)
+		fractal->offset_x -= 42 / fractal->zoom;
+	else if (key_code == RIGHT)
+		fractal->offset_x += 42 / fractal->zoom;
+	else if (key_code == UP)
+		fractal->offset_y -= 42 / fractal->zoom;
+	else if (key_code == DOWN)
+		fractal->offset_y += 42 / fractal->zoom;
+	else if (key_code == KEY_R)
+		init_fractal(fractal);
+	else if (key_code == KEY_C)
+		fractal->color += (255 * 255 * 255) / 100;
+	else if (key_code == KEY_J)
+		set_random_julia(&fractal->cx, &fractal->cy);
+	else if (key_code == KEY_M || key_code == KEY_P)
+		change_iterations(fractal, key_code);
+	draw_fractal(fractal, fractal->name);
+	return (0);
+}
+
+int	mouse_hook(int mouse_code, int x, int y, t_fractal *fractal)
+{
+	if (mouse_code == SCROLL_UP)
+		zoom(fractal, x, y, ZOOM_IN);
+	else if (mouse_code == SCROLL_DOWN)
+		zoom(fractal, x, y, ZOOM_OUT);
+	draw_fractal(fractal, fractal->name);
+	return (0);
+}

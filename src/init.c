@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:35:04 by julia             #+#    #+#             */
-/*   Updated: 2025/11/13 18:57:32 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/15 16:59:46 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@ void	init_fractal(t_fractal *fractal)
 	fractal->y = 0;
 	fractal->color = 0xFCBE11;
 	fractal->zoom = 233.33;
+	fractal->zoom_level = 1.42;
 	fractal->offset_x = -0.5;
 	fractal->offset_y = 0.0;
 	fractal->max_iterations = 120;
+	fractal->cx = 0.0;
+	fractal->cy = 0.0;
 }
 
 void	init_mlx(t_fractal *fractal)

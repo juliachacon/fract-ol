@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 23:37:21 by julia             #+#    #+#             */
-/*   Updated: 2025/11/11 12:53:52 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/15 17:38:12 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,46 +30,82 @@ void	put_color_to_pixel(t_fractal *fractal, int x, int y, int colour)
 
 int	exit_fractal(t_fractal *fractal)
 {
+	if (fractal->image)
 	mlx_destroy_image(fractal->mlx, fractal->image);
+	if (fractal->window)
 	mlx_destroy_window(fractal->mlx, fractal->window);
-	// Solo liberar si realmente se usó malloc
+	#ifdef __linux__
 	if (fractal->mlx)
-		free(fractal->mlx);
-	if (fractal)
-		free(fractal);
-	exit(0); // salida normal
-}
-
-// int	mouse_hook(int mouse_code, int x, int y, t_fractal *fractal)
-// {
-// 	if (mouse_code == SCROLL_UP)
-// 		zoom(fractal, x, y, 1);
-// 	else if (mouse_code == SCROLL_DOWN)
-// 		zoom(fractal, x, y, -1);
-// 	draw_fractal(fractal, fractal->name);
-// 	return (0);
-// }
-
-int	key_hook(int key_code, t_fractal *fractal)
-{
-	if (key_code == 65307)
-		exit_fractal(fractal);
-	else if (key_code == 65361)
-		fractal->offset_x -= 42 / fractal->zoom;
-	else if (key_code == 65363)
-		fractal->offset_x += 42 / fractal->zoom;
-	else if (key_code == 65362)
-		fractal->offset_y -= 42 / fractal->zoom;
-	else if (key_code == 65364)
-		fractal->offset_y += 42 / fractal->zoom;
-	else if (key_code == 114)
-		init_fractal(fractal);
-	// else if (key_code == C)
-	// 	fractal->color += (255 * 255 * 255) / 100;
-	// else if (key_code == J)
-	// 	set_random_julia(&fractal->cx, &fractal->cx);
-	// else if (key_code == M || key_code == P)
-	// 	change_iterations(fractal, key_code);
-	// draw_fractal(fractal, fractal->name);
+	{
+		mlx_destroy_display(fractal->mlx);
+		free(fractal->mlx);   // el puntero de MLX, suele venir de malloc
+	}
+	#endif
+	exit(0);
 	return (0);
 }
+
+double	generate_random_c(void)
+{
+	return (((double)rand() / RAND_MAX) * 3.0 - 1.5);
+}
+
+void	change_iterations(t_fractal *fractal, int key_code)
+{
+	if (key_code == KEY_M)
+	{
+		if (fractal->max_iterations > ITER_MIN)
+			fractal->max_iterations -= ITER_STEP;
+	}
+	else if (key_code == KEY_P)
+	{
+		if (fractal->max_iterations < ITER_MAX)
+			fractal->max_iterations += ITER_STEP;
+	}
+}
+
+int	get_color(t_fractal *fractal, int i)
+{
+	double	t;
+	int		shade;
+	int		color;
+
+	if (i == fractal->max_iterations)
+		return (0x000000);
+	t = (double)i / fractal->max_iterations;
+	shade = (int)(255 * (1.0 - t));
+	color = fractal->color;
+	return (((((color >> 16) & 0xFF) * shade) / 255) << 16
+		| ((((color >> 8) & 0xFF) * shade) / 255) << 8
+		| (((color & 0xFF) * shade) / 255));
+}
+
+// int	get_color(t_fractal *fractal, int i)
+// {
+// 	double	t;
+// 	int		shade;
+// 	int		base;
+// 	int		br;
+// 	int		bg;
+// 	int		bb;
+// 	int		r;
+// 	int		g;
+// 	int		b;
+
+// 	if (i == fractal->max_iterations)
+// 		return (0x000000);
+
+// 	t = (double)i / fractal->max_iterations; //shade según iteraciones
+// 	shade = (int)(255 * (1.0 - t)); // 255 cerca del borde, 0 lejos
+
+// 	base = fractal->color; //color base cambia con C
+// 	br = (base >> 16) & 0xFF;
+// 	bg = (base >> 8) & 0xFF;
+// 	bb = base & 0xFF;
+
+// 	r = (br * shade) / 255;//escalar por el shade
+// 	g = (bg * shade) / 255;
+// 	b = (bb * shade) / 255;
+
+// 	return ((r << 16) | (g << 8) | b);
+// }

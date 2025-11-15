@@ -6,7 +6,7 @@
 #    By: julia <julia@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/09 02:02:37 by julia             #+#    #+#              #
-#    Updated: 2025/11/13 19:44:52 by julia            ###   ########.fr        #
+#    Updated: 2025/11/15 17:49:13 by julia            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ OBJ_DIR     = obj
 
 # Lista de ficheros .c (SOLO el nombre, sin "src/")
 # >>> CAMBIA ESTA LÍNEA CON TUS .C <<<
-SRC_FILES   = main.c init.c utils.c draw.c mandelbrot.c julia.c
+SRC_FILES   = main.c init.c mandelbrot.c julia.c burning_ship.c \
+			 draw.c utils.c mouse_keys.c
 
 # Construimos rutas completas
 SRCS        = $(addprefix $(SRC_DIR)/,$(SRC_FILES))
