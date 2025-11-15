@@ -6,7 +6,7 @@
 /*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:49:43 by julia             #+#    #+#             */
-/*   Updated: 2025/11/15 17:52:50 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/15 18:24:43 by julia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@
 # define MIN_ZOOM 0.0000001
 # define MAX_ZOOM 1000000000.0
 
-# define ITER_STEP 50
-# define ITER_MIN 50
-# define ITER_MAX 5000
+# define ITER_STEP 10
+# define ITER_MIN 30
+# define ITER_MAX 1000
 
 // --- Keyboard ---
 // Linux: MLX usa X11 keycodes
