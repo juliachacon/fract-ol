@@ -1,49 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bship.c                                            :+:      :+:    :+:   */
+/*   burning_ship.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julia <julia@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jchacon- <jchacon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 17:50:33 by julia             #+#    #+#             */
-/*   Updated: 2025/11/15 17:51:25 by julia            ###   ########.fr       */
+/*   Updated: 2025/11/16 17:04:38 by jchacon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static void	color_ship(t_fractal *fractal, int i)
-{
-	double	t;
-	int		r;
-	int		g;
-	int		b;
-	int		color;
+/* Loops through every pixel on the screen and calls calculate_mandelbrot()
+** for each (x, y) coordinate to draw the full Mandelbrot fractal. */
 
-	if (i == fractal->max_iterations)
+void	draw_burning_ship(t_fractal *fractal)
+{
+	fractal->x = 0;
+	while (fractal->x < SIZE)
 	{
-		put_color_to_pixel(fractal, fractal->x, fractal->y, 0x000000);
-		return ;
+		fractal->y = 0;
+		while (fractal->y < SIZE)
+		{
+			calculate_burning_ship(fractal);
+			fractal->y++;
+		}
+		fractal->x++;
 	}
-	t = (double)i / fractal->max_iterations;
-	r = (int)(((fractal->color >> 16) & 0xFF) * t);
-	g = (int)(((fractal->color >> 8) & 0xFF) * t);
-	b = (int)((fractal->color & 0xFF) * t);
-	color = (r << 16) | (g << 8) | b;
-	put_color_to_pixel(fractal, fractal->x, fractal->y, color);
 }
+
+/*
+** Computes the Burning Ship fractal for a single pixel.
+**
+** The Burning Ship fractal is defined similarly to the Mandelbrot set,
+** but at each iteration both the real and imaginary parts of Z are
+** replaced by their absolute values before applying:
+**
+**        Z(n+1) = Z(n)^2 + C
+**
+** Here, C is obtained from the pixel coordinates (x, y), and Z starts
+** at 0. If the magnitude of Z grows beyond 2, the point is considered
+** to escape and the iteration count determines its color via color_ship().
+*/
 
 void	calculate_burning_ship(t_fractal *fractal)
 {
 	double	zx;
 	double	zy;
-	double	cx;
-	double	cy;
 	double	tmp;
 	int		i;
 
-	cx = ((fractal->x - SIZE / 2.0) / fractal->zoom) + fractal->offset_x;
-	cy = ((fractal->y - SIZE / 2.0) / fractal->zoom) + fractal->offset_y;
 	zx = 0.0;
 	zy = 0.0;
 	i = 0;
@@ -51,12 +58,14 @@ void	calculate_burning_ship(t_fractal *fractal)
 	{
 		zx = fabs(zx);
 		zy = fabs(zy);
-		tmp = zx * zx - zy * zy + cx;
-		zy = 2 * zx * zy + cy;
+		tmp = zx * zx - zy * zy + ((fractal->x - SIZE / 2.0) / fractal->zoom
+				+ fractal->offset_x);
+		zy = 2 * zx * zy + ((fractal->y - SIZE / 2.0) / fractal->zoom
+				+ fractal->offset_y);
 		zx = tmp;
 		if (zx * zx + zy * zy >= 4.0)
 			break ;
 		i++;
 	}
-	color_ship(fractal, i);
+	put_color_to_pixel(fractal, fractal->x, fractal->y, get_color(fractal, i));
 }

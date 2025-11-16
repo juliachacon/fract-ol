@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jchacon- <jchacon-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 22:13:03 by julia             #+#    #+#             */
-/*   Updated: 2025/11/16 17:09:59 by jchacon-         ###   ########.fr       */
+/*   Created: 2025/11/16 17:09:12 by jchacon-          #+#    #+#             */
+/*   Updated: 2025/11/16 17:09:14 by jchacon-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	print_usage(void)
 	ft_putendl_fd("   or: ./fractol julia", 1);
 	ft_putendl_fd("   or: ./fractol julia <cx> <cy>", 1);
 	ft_putendl_fd("   e.g.: ./fractol julia 0.8 0.156", 1);
+	ft_putendl_fd("   or: ./fractol bship", 1);
 }
 
 /*  Sets the Julia set parameter c = cx + cy*i.
@@ -66,6 +67,11 @@ int	draw_fractal(t_fractal *fractal, char *query)
 		fractal->name = "julia";
 		draw_julia(fractal);
 	}
+	else if (ft_strncmp(query, "bship", 5) == 0)
+	{
+		fractal->name = "bship";
+		draw_burning_ship(fractal);
+	}
 	else
 	{
 		print_usage();
@@ -107,6 +113,8 @@ int	main(int argc, char **argv)
 	}
 	else if (ft_strncmp(argv[1], "mandelbrot", 10) == 0)
 		fractal.name = "mandelbrot";
+	else if (ft_strncmp(argv[1], "bship", 5) == 0)
+		fractal.name = "bship";
 	else
 		return (print_usage(), 0);
 	draw_fractal(&fractal, fractal.name);
